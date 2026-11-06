@@ -19,11 +19,9 @@ RUN --mount=type=cache,target=/root/.cache/go-build \
   CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
   go build -ldflags="-w -s" -o /swgp-go
 
-FROM --platform=${TARGETPLATFORM:-linux/amd64} alpine:${BASE_ALPINE}
+FROM alpine:${BASE_ALPINE}
 
 COPY --from=buildenv /src/swgp-go/docs/config.json /etc/swgp-go/config.json
-COPY --from=buildenv /swgp-go /usr/local/bin/swgp-go
-
-RUN chmod +x /usr/local/bin/swgp-go
+COPY --chmod=755 --from=buildenv /swgp-go /usr/local/bin/swgp-go
 
 CMD ["/usr/local/bin/swgp-go", "-confPath", "/etc/swgp-go/config.json"]
