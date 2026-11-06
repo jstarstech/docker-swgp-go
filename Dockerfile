@@ -1,12 +1,12 @@
 ARG BASE_ALPINE=3.22
-ARG BASE_GOLANG=1.25.2
+ARG BASE_GOLANG=1.26.0
 
 FROM --platform=${BUILDPLATFORM:-linux/amd64} golang:${BASE_GOLANG}-alpine${BASE_ALPINE} AS buildenv
 
 RUN apk add --no-cache git
 
 # Clone only the needed tag for reproducible builds
-ARG SWGP_TAG=v1.8.0
+ARG SWGP_TAG=v1.9.0
 RUN git clone --branch ${SWGP_TAG} https://github.com/database64128/swgp-go /src/swgp-go
 
 WORKDIR /src/swgp-go/cmd/swgp-go
